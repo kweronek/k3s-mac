@@ -17,7 +17,8 @@ Benötigt werden:
 * Software: 
   * Canonical [`multipass`](https://multipass/run)
   * Kubernetes: [`kubectl`](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
-* Internetverbindung zum Laden der Ubuntu- und K3s-Software.  
+* Internetverbindung
+
 Anmerkung: Bei einer größeren Anzahl von Worker-Knoten sind entsprechend mehr Hardware (ca. 1G RAM, 3G Platte, 1 CPU je Knoten) bereitzustellen.
 
 ## Skripte und Anwendung:
