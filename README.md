@@ -1,12 +1,23 @@
 # k3s-mac
 
-## What is it?
+## Beschreibung k3s-mac
+Eine Reihe von Shell-Skripten, um auf dem Mac ein k3s-Cluster zur erzeugen, zu betreiben und zu löschen.
 
-Eine Reihe von Shell-Skripten, um auf dem Mac k3s-Cluster.
+### Anwendungsfall
+k3s-Cluster ermöglichen die schnelle und Ressourcenschonen Implementeriung eines voll funktionsfähigen Kubernetes-Clusters auf einen MAC. Dadurch können einen Vielzahl von Kubernetes-Anwendungen auf dem MAC getestet werden.
 
-## Description
+### Funktionsweise
 
-## Prerequisites and Technical Requirements
+
+### Voraussetzungen and technische Anforderungen
+Benötigt wird:
+* ein Mac
+* mindestens MacOS 10.X
+* minimal  4GB RAM
+* minimal 10 GB Plattenspeicher
+* zwei Cores
+* bash-shell
+* Canonical multipass
 
 ## Skripte und Anwendung:
 
