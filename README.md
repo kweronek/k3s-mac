@@ -66,7 +66,7 @@ purgeCluster <Cluster-Name>
 ```
 addCluster myCluster 3 1
 multipass list
-getKubeconfig
+getKubeconfig myCluster
 kubectl cluster-info
 kubectl get nodes
 kubectl get pods --all-namespaces
