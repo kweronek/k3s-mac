@@ -6,6 +6,7 @@ echo
 ((CNT=0))
 while [ "" != "$(multipass list|grep k3s-$1-worker-$CNT|grep Stopped)" ]
 do
+	echo k3s-$1-worker-$CNT
 	if  multipass -v start k3s-$1-worker-$CNT; then
 		  	echo started with warning
 		else
@@ -18,6 +19,7 @@ done
 ((CNT=0))
 while [ "" != "$(multipass list|grep k3s-$1-master-$CNT|grep Stopped)" ]
 do
+	echo k3s-$1-master-$CNT
 	if  multipass -v start k3s-$1-master-$CNT; then
 		  	echo started with warning
 		else
