@@ -33,11 +33,11 @@ echo "**************************************************************************
 multipass info k3s-$CL_NAM-master-0
 
 echo "**************************************************************************************************************************** install k3s on master"
-# Deploy k3s on the master node
-multipass exec k3s-$CL_NAM-master-0 -- /bin/bash -c "curl -sfL https://get.k3s.io | sh -s - --write-kubeconfig-mode 644"
 # Get the IP of the master node
 export K3S_NODEIP_MASTER="https://$(multipass info k3s-$CL_NAM-master-0 | grep "IPv4" | awk -F' ' '{print $2}'):6443"
 echo K3S_NODEIP_MASTER $K3S_NODEIP_MASTER
+# Deploy k3s on the master node
+multipass exec k3s-$CL_NAM-master-0 -- /bin/bash -c "curl -sfL https://get.k3s.io | sh -s - --write-kubeconfig-mode 644"
 # Get the TOKEN from the master node
 K3S_TOKEN="$(multipass exec k3s-$CL_NAM-master-0 -- /bin/bash -c "sudo cat /var/lib/rancher/k3s/server/node-token")"
 
