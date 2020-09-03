@@ -7,14 +7,18 @@ Eine Reihe von Shell-Skripten, um auf dem Mac ein K3s-Cluster zur erzeugen, zu b
 K3s-Cluster ermöglichen die schnelle und Ressourcenschonen Implementeriung eines voll funktionsfähigen Kubernetes-Clusters auf einen MAC. Dadurch können einen Vielzahl von Kubernetes-Anwendungen auf dem MAC getestet werden.
 
 ### Funktionsweise
-Die parametrisierten Script arbeiten mit Cononical [multipass](https://multipass/run). Dabei werden mindestens zwei virtuelle Maschinen (VMs) mit Ubuntu erzeugt, upgedated und die erforderlichen Pakete installiert. Darüber hinaus werden Verzeichnisse der VMs in lokale Verzeichnisse gemountet. Dabei wird immer die aktuelle LTS-Version von Ubuntu verwendet und die letzte aktuelle stabile Version von K3s. Für k3s wird aktuelle containerD als Runtime verwendet.
+Die parametrisierten Script arbeiten mit Cononical [multipass](https://multipass/run). Dabei werden mindestens zwei virtuelle Maschinen (VMs) mit Ubuntu erzeugt, upgedated und die erforderlichen Pakete installiert. Darüber hinaus werden Verzeichnisse der VMs in lokale Verzeichnisse gemountet. Dabei wird immer die aktuelle [`Ubuntu-LTS-Version`](https://wiki.ubuntu.com/Releases) verwendet und die letzte aktuelle stabile Version von [`K3s`](https://github.com/rancher/k3s/releases). Für K3s wird aktuelle containerD als Runtime verwendet.
 
 ### Voraussetzungen and technische Anforderungen
 Benötigt werden:
-* Hardware: Mac mit mindestens MacOS 10.X, zwei Cores, minimal  4GB RAM, minimal 10 GB Plattenspeicher,
-* Software: Canonical multipass, kubectl
-* Internetverbindung zum Laden der Ubuntu- und k3s-Software.
-Anmerkung: Bei einer größeren Anzahl von Worker-Knoten sind entsprechend mehr Hardware bereitzustellen.
+* Hardware: 
+  * Mac mit mindestens MacOS 10.X, zwei Cores, 
+  * mindestens 4GB RAM, 10 GB freie Plattenspeicher,
+* Software: 
+  * Canonical [`multipass`](https://multipass/run)
+  * Kubernetes: [`kubectl`](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
+* Internetverbindung zum Laden der Ubuntu- und K3s-Software.
+Anmerkung: Bei einer größeren Anzahl von Worker-Knoten sind entsprechend mehr Hardware (ca. 1G RAM, 3G Platte, 1 CPU je Knoten) bereitzustellen.
 
 ## Skripte und Anwendung:
 
@@ -34,6 +38,7 @@ kopiert diese mit dem Namen `.kubeconfig` in das lokale Verzeichnis.
 ```
 getKubeconfig <Cluster-Name>
 ```
+Anmerkung: Nach der Ausführung muss der Befehl `export KUBECONFIG=./.kubeconfig`ausgeführt werden.
 
 ### setKubeconfig
 `setKubeconfig`  
