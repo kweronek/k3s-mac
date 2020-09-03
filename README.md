@@ -1,18 +1,18 @@
 # k3s-mac
 
-### What is it?
+## What is it?
 
 Eine Reihe von Shell-Skripten, um auf dem Mac k3s-Cluster.
 
-### Description
+## Description
 
-### Prerequisites and Technical Requirements
+## Prerequisites and Technical Requirements
 
-### Skripte und Anwendung:
+## Skripte und Anwendung:
 
-##### addCluster
+### addCluster
 
-`addCluster`erstellt Master- und Worker-Nodes und erzeugt einen neuen k3s Cluster.
+`addCluster` erstellt Master- und Worker-Nodes und erzeugt einen neuen k3s Cluster.
 
 Syntax:
 ```addCluster <Cluster-Name> <Zahl der Worker-Nodes> <Zahl der Master-Nodes>```
@@ -25,12 +25,15 @@ Als Cluster-Name wird dann `k3s-<Cluster-Name>` verwendet. Die Knotenbezeichnung
   
 Hinweis: in der aktuellen Version ist nur ein Master-Node möglich (Einsatz von SQ-Lite)
 
-##### getKubeconfig 
+### getKubeconfig 
 
-##### stopCluster
+### stopCluster
 
-##### startCluster
+### startCluster
 
-##### purgeCluster
+### purgeCluster
 
-### Hilfreiche Befehle
+## Hilfreiche Befehle
+
+multipass get notes
+mulitpass get info <Knoten-Name>
