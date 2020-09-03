@@ -1,29 +1,33 @@
+#
+# start nodes of an existing cluster
+#
+
 clear
 echo "**************************************************************************************************************************** stop nodes of cluster $1"
 multipass list
-echo
 
 ((CNT=0))
 while [ "" != "$(multipass list|grep k3s-$1-worker-$CNT|grep Stopped)" ]
 do
+	echo "*******************************"
 	echo k3s-$1-worker-$CNT
 	if  multipass -v start k3s-$1-worker-$CNT; then
-		  	echo started with warning
+		  	echo started ok
 		else
-			echo started ok
+			echo started with warning
 	fi
-	echo ************************
 	CNT=$(($CNT+1))
 done	
 
 ((CNT=0))
 while [ "" != "$(multipass list|grep k3s-$1-master-$CNT|grep Stopped)" ]
 do
+	echo "*******************************"
 	echo k3s-$1-master-$CNT
 	if  multipass -v start k3s-$1-master-$CNT; then
-		  	echo started with warning
+		  	echo started ok
 		else
-			echo started ok
+			echo started with warning
 	fi
 	CNT=$(($CNT+1))
 done	

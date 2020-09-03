@@ -58,9 +58,9 @@ purgeCluster <Cluster-Name>
 ```
 ## Hilfreiche Befehle
 `multipass list`  
-`multipass info <Knoten-Name>`  
 `kubectl cluster-info`  
-
+`multipass info <Knoten-Name>`  
+`multipass info --all`
 
 ## Beispiel
 ```
