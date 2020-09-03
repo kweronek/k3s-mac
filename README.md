@@ -40,11 +40,13 @@ getKubeconfig <Cluster-Name>
 ```
 Anmerkung: Nach der Ausführung muss der Befehl `export KUBECONFIG=./.kubeconfig`ausgeführt werden.
 
+<!--
 ### setKubeconfig
 `setKubeconfig`  
 ```
 setKubeconfig <Cluster-Name>
 ```
+-->
 
 ### stopCluster
 `stopCluster` stoppt alle Master- und Worker-Knoten eines Clusters.
