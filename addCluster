@@ -1,6 +1,7 @@
+
 clear
-# single master multi node k3s cluster sturtup
-# user k3s-$CL_NAM-on.sh <cluster-name> < number of worker notes >
+# single master multi worker-node k3s cluster startup
+# usage: k3s-$CL_NAM-on.sh <cluster-name> < number of worker notes >
 echo "****************************************************************************************************************************"
 echo Create a K3S-cluster with name $1 with $2 worker and $3 master nodes
 export CL_NAM=$1
