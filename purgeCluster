@@ -1,0 +1,23 @@
+clear
+echo "**************************************************************************************************************************** stop nodes of cluster $1"
+multipass list
+for ((CNT=0; CNT<$2; CNT+=1)); do
+	multipass -v stop k3s-$1-worker-$CNT
+done
+for ((CNT=0; CNT<$3; CNT+=1)); do
+	multipass -v stop k3s-$1-master-0 
+done
+multipass list
+echo "**************************************************************************************************************************** delete nodes of cluster $1"
+for ((CNT=0; CNT<$2; CNT+=1)); do
+	multipass -v delete k3s-$1-worker-$CNT
+done
+for ((CNT=0; CNT<$3; CNT+=1)); do
+	multipass -v delete k3s-$1-master-$CNT
+done
+multipass -v list
+echo "**************************************************************************************************************************** purge nodes of cluster $1"
+multipass -v purge
+echo "**************************************************************************************************************************** multipass list:"
+multipass -v list
+echo "**************************************************************************************************************************** completed"
