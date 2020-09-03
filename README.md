@@ -1,17 +1,21 @@
 # k3s-mac
 
-## Shell-Skripte, die k3s-Cluster auf dem Mac zur erzeugen.
+### What is it?
 
-## Prerequisites: Canonical multipass
+Eine Reihe von Shell-Skripten, um auf dem Mac k3s-Cluster.
 
-## Skripte und Anwendung:
+### Description
 
-### getKubeconfig
+### Prerequisites and Technical Requirements
 
-### addCluster
+### Skripte und Anwendung:
 
-### stopCluster
+##### getKubeconfig
 
-### startCluster
+##### addCluster
 
-### purgeCluster
+##### stopCluster
+
+##### startCluster
+
+##### purgeCluster
