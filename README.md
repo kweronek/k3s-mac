@@ -41,7 +41,9 @@ kopiert diese mit dem Namen `.kubeconfig` in das lokale Verzeichnis
 `stopCluster` stoppt alle Master- und Worker-Knoten eines Clusters.
 
 Syntax:  
-```stopCluster <Cluster-Name>```
+```
+stopCluster <Cluster-Name>
+```
 ### startCluster
 `startCluster` startet alle Master- und Worker-Knoten eines Clusters.
 
