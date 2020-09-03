@@ -87,4 +87,5 @@ sleep 10
 
 echo "**************************************************************************************************************************** kubectl get nodes"
 multipass exec k3s-$CL_NAM-master-0 -- /bin/bash -c "sudo kubectl get nodes"
+multipass exec k3s-$CL_NAM-master-0 -- /bin/bash -c "sudo kubectl get pods --all-namespaces"
 echo "**************************************************************************************************************************** cluster $CL_NAM completed"
