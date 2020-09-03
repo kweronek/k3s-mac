@@ -72,3 +72,4 @@ kubectl get nodes
 kubectl get pods --all-namespaces
 stopCluster myCluster
 multipass list
+```
