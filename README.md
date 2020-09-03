@@ -12,15 +12,15 @@ k3s-Cluster ermöglichen die schnelle und Ressourcenschonen Implementeriung eine
 ### Voraussetzungen and technische Anforderungen
 Benötigt wird:
 * Hardware: Mac mit mindestens MacOS 10.X, zwei Cores, minimal  4GB RAM, minimal 10 GB Plattenspeicher,
-* Software: Canonical multipass,
-* Internetverbindung zum Laden der Ubuntu und k3s Software.
+* Software: Canonical multipass, kubectl
+* Internetverbindung zum Laden der Ubuntu- und k3s-Software.
 
 ## Skripte und Anwendung:
 
 ### addCluster
 `addCluster` erstellt Master- und Worker-Nodes und erzeugt einen neuen k3s Cluster.  
 ```  
-addCluster `*<Cluster-Name>*` <Zahl der Worker-Nodes> <Zahl der Master-Nodes>  
+addCluster ```*<Cluster-Name>*` <Zahl der Worker-Nodes> <Zahl der Master-Nodes>  
 ```
 Als Cluster-Name wird dann `k3s-<Cluster-Name>` verwendet. Die Knotenbezeichnungen sind dann:  
 ```
