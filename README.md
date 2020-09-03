@@ -36,12 +36,10 @@ Als Cluster-Name wird dann `k3s-<Cluster-Name>` verwendet. Die Knotenbezeichnung
 Hinweis: in der aktuellen Version ist nur ein Master-Node möglich (Einsatz von SQ-Lite)
 
 ### getKubeconfig
-`getKubeconfig` holt die Kubeconfig-Datei `<Master-Node-Name>/etc/rancher/k3s/k3s.yaml` vom Master und  
-kopiert diese mit dem Namen `.kubeconfig` in das lokale Verzeichnis.
+`getKubeconfig` holt die Kubeconfig-Datei `<Master-Node-Name>/etc/rancher/k3s/k3s.yaml` vom Master, kopiert diese nach $HOME/.kube/config (Default für Kubeconfig-Dateien). Danach wird die Master-IP-Adresse von 127.0.01 auf die aktuelle IP-Adresse des Master-Knoten `k3s-<Cluster-Name>-master-0` gesetzt. Dies ermöglicht den unmittelbaren Zugriff von `kubectl` auf den Cluster. 
 ```
 getKubeconfig <Cluster-Name>
 ```
-Anmerkung: Nach der Ausführung muss der Befehl `export KUBECONFIG=./.kubeconfig`ausgeführt werden.
 
 ### stopCluster
 `stopCluster` stoppt alle Master- und Worker-Knoten eines Clusters.
@@ -62,5 +60,15 @@ purgeCluster <Cluster-Name>
 `multipass list`  
 `multipass info <Knoten-Name>`  
 `kubectl cluster-info`  
-`kubectl get nodes`  
-`kubectl get pods --all-namespaces`
+
+
+## Beispiel
+```
+addCluster myCluster 3 1
+multipass list
+getKubeconfig
+kubectl cluster-info
+kubectl get nodes
+kubectl get pods --all-namespaces
+stopCluster myCluster
+multipass list
