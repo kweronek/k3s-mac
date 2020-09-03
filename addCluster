@@ -1,0 +1,90 @@
+clear
+# single master multi node k3s cluster sturtup
+# user k3s-$CL_NAM-on.sh <cluster-name> < number of worker notes >
+echo "****************************************************************************************************************************"
+echo Create a K3S-cluster with name $1 with $2 worker and $3 master nodes
+export CL_NAM=$1
+export NUM_WORKERS=$2
+export NUM_MASTERS=$3
+
+echo "**************************************************************************************************************************** launch master"
+multipass launch ubuntu -n k3s-$CL_NAM-master-0 -v -c 1 -d 3G -m 1G
+
+echo "**********************************************************************	****************************************************** update master"
+multipass exec k3s-$CL_NAM-master-0 sudo apt-get update
+
+echo "**************************************************************************************************************************** upgrade master"
+multipass exec k3s-$CL_NAM-master-0 -- /bin/bash -c "sudo apt-get upgrade --assume-yes"
+# multipass exec k3s-$CL_NAM-master-0 sudo apt install sshfs
+multipass exec k3s-$CL_NAM-master-0 sudo snap install multipass-sshfs
+
+
+echo "**************************************************************************************************************************** mount master"
+mkdir -p store
+mkdir -p store/k3s-$CL_NAM-master-0
+multipass mount -v -u 502:1000 -g 20:1000 store/k3s-$CL_NAM-master-0 k3s-$CL_NAM-master-0:/Users/Ubuntu
+
+echo "**************************************************************************************************************************** launch worker"
+for ((CNT=0; CNT<$NUM_WORKERS; CNT+=1)); do
+	multipass launch ubuntu -n k3s-$CL_NAM-worker-$CNT -v -c 1 -d 3G -m 1G
+done
+
+echo "**************************************************************************************************************************** info"
+multipass info k3s-$CL_NAM-master-0
+
+echo "**************************************************************************************************************************** install k3s on master"
+# Deploy k3s on the master node
+multipass exec k3s-$CL_NAM-master-0 -- /bin/bash -c "curl -sfL https://get.k3s.io | sh -s - --write-kubeconfig-mode 644"
+# Get the IP of the master node
+export K3S_NODEIP_MASTER="https://$(multipass info k3s-$CL_NAM-master-0 | grep "IPv4" | awk -F' ' '{print $2}'):6443"
+echo K3S_NODEIP_MASTER $K3S_NODEIP_MASTER
+# Get the TOKEN from the master node
+K3S_TOKEN="$(multipass exec k3s-$CL_NAM-master-0 -- /bin/bash -c "sudo cat /var/lib/rancher/k3s/server/node-token")"
+
+echo "**************************************************************************************************************************** upgrade workers"
+for ((CNT=0; CNT<$NUM_WORKERS; CNT+=1)); do
+	multipass exec k3s-$CL_NAM-worker-$CNT sudo apt-get update
+	multipass exec k3s-$CL_NAM-worker-$CNT -- /bin/bash -c "sudo apt-get upgrade --assume-yes"
+	echo "**************************************************************************************************************************** k3s-$CL_NAM-worker-$CNT upgraded"
+done
+
+echo "**************************************************************************************************************************** mount workers"
+for ((CNT=0; CNT<$NUM_WORKERS; CNT+=1)); do
+#	multipass exec k3s-$CL_NAM-worker-$CNT sudo apt install sshfs
+multipass exec k3s-$CL_NAM-master-0 sudo snap install multipass-sshfs
+	mkdir -p store/k3s-$CL_NAM-worker-$CNT
+	multipass mount -v -u 502:1000 -g 20:1000 store/k3s-$CL_NAM-worker-$CNT k3s-$CL_NAM-worker-$CNT:/Users/Ubuntu
+	echo "**************************************************************************************************************************** worker $CNT mounted"
+done
+
+echo "**************************************************************************************************************************** multipass info worker"
+for ((CNT=0; CNT<$NUM_WORKERS; CNT+=1)); do
+	multipass info k3s-$CL_NAM-worker-$CNT
+	echo "****************************************************************************************************************************"
+done
+
+echo "**************************************************************************************************************************** deploy k3s on workers"
+for ((CNT=0; CNT<$NUM_WORKERS; CNT+=1)); do
+	# Deploy k3s on the worker node
+	multipass exec k3s-$CL_NAM-worker-$CNT -- /bin/bash -c "curl -sfL https://get.k3s.io | K3S_TOKEN=${K3S_TOKEN} K3S_URL=${K3S_NODEIP_MASTER} sh -"
+	echo "**************************************************************************************************************************** k3s deployed on worker $CNT"
+done
+
+sleep 10
+echo "**************************************************************************************************************************** label worker-nodes"
+multipass exec k3s-${CL_NAM}-master-0 -- /bin/bash -c "export KUBECONFIG=~/.kube/config:/etc/rancher/k3s/k3s.yaml"
+
+for ((CNT=0; CNT<$NUM_WORKERS; CNT+=1)); do
+	multipass exec k3s-${CL_NAM}-master-0 -- /bin/bash -c "sudo kubectl label node k3s-${CL_NAM}-worker-${CNT} node-role.kubernetes.io/worker=worker"
+done
+
+# Configure taint NoSchedule for the k3s-master node
+#echo "**************************************************************************************************************************** taint-nodes"
+multipass exec k3s-$CL_NAM-master-0 -- /bin/bash -c "kubectl --kubeconfig=${HOME}/.kube/k3s.yaml taint node k3s-${CL_NAM}-master-0 node-role.kubernetes.io/master=effect:NoSchedule"
+echo "**************************************************************************************************************************** multipass list"
+multipass list
+sleep 10
+
+echo "**************************************************************************************************************************** kubectl get nodes"
+multipass exec k3s-$CL_NAM-master-0 -- /bin/bash -c "sudo kubectl get nodes"
+echo "**************************************************************************************************************************** cluster $CL_NAM completed"
