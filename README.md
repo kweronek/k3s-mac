@@ -23,15 +23,31 @@ Als Cluster-Name wird dann `k3s-<Cluster-Name>` verwendet. Die Knotenbezeichnung
   
 Hinweis: in der aktuellen Version ist nur ein Master-Node möglich (Einsatz von SQ-Lite)
 
-### getKubeconfig 
+### getKubeconfig
+
+`getKubeconfig` holt die Kubeconfig-Datei `<Master-Node-Name>/etc/rancher/k3s/k3s.yaml` vom Master und kopiert diese in mit dem Namen `.kubeconfig` das lokale Verzeichnis  
 
 ### stopCluster
 
+`stopCluster` stoppt alle Master- und Worker-Knoten eines Clusters.
+
+Syntax:
+```stopCluster <Cluster-Name>```
+
 ### startCluster
+
+`startCluster` startet alle Master- und Worker-Knoten eines Clusters.
+
+Syntax:
+```stopCluster <Cluster-Name>```
 
 ### purgeCluster
 
-## Hilfreiche Befehle
+`purgeCluster` stoppt alle Master- und Worker-Knoten eines Clusters und löscht nicht wiederherstellbar.
 
-multipass get notes
-mulitpass get info <Knoten-Name>
+Syntax:
+```stopCluster <Cluster-Name>```
+
+## Hilfreiche Befehle
+multipass get notes  
+mulitpass get info <Knoten-Name>  
