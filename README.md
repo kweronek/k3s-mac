@@ -54,12 +54,12 @@ stopCluster <Cluster-Name>
 ### startCluster
 `startCluster` startet alle Master- und Worker-Knoten eines Clusters.
 ```
-stopCluster <Cluster-Name>
+startCluster <Cluster-Name>
 ```
 ### purgeCluster
 `purgeCluster` stoppt alle Master- und Worker-Knoten eines Clusters und löscht nicht wiederherstellbar.
 ```
-stopCluster <Cluster-Name>
+purgeCluster <Cluster-Name>
 ```
 ## Hilfreiche Befehle
 `multipass list`  
