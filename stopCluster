@@ -1,10 +1,18 @@
 clear
 echo "**************************************************************************************************************************** stop nodes of cluster $1"
 multipass list
-for ((CNT=0; CNT<$2; CNT+=1)); do
+
+CNT=0
+while [ "" != "$(multipass list|grep k3s-$1-worker-$CNT|grep Running)" ]
+do
 	multipass -v stop k3s-$1-worker-$CNT
-done
-for ((CNT=0; CNT<$3; CNT+=1)); do
+	CNT=+1
+done	
+
+NUM_MASTER=$3
+NUM_MASTER=1
+
+for ((CNT=0; CNT<NUM_MASTER; CNT+=1)); do
 	multipass -v stop k3s-$1-master-0 
 done
 echo "**************************************************************************************************************************** multipass list:"
