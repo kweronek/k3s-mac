@@ -16,7 +16,7 @@ multipass exec k3s-$CL_NAM-master-0 sudo apt-get update
 echo "**************************************************************************************************************************** upgrade master"
 multipass exec k3s-$CL_NAM-master-0 -- /bin/bash -c "sudo apt-get upgrade --assume-yes"
 # multipass exec k3s-$CL_NAM-master-0 sudo apt install sshfs
-multipass exec k3s-$CL_NAM-master-0 sudo snap install multipass-sshfs
+# multipass exec k3s-$CL_NAM-master-0 sudo snap install multipass-sshfs
 
 
 echo "**************************************************************************************************************************** mount master"
@@ -51,7 +51,7 @@ done
 echo "**************************************************************************************************************************** mount workers"
 for ((CNT=0; CNT<$NUM_WORKERS; CNT+=1)); do
 #	multipass exec k3s-$CL_NAM-worker-$CNT sudo apt install sshfs
-multipass exec k3s-$CL_NAM-master-0 sudo snap install multipass-sshfs
+#   multipass exec k3s-$CL_NAM-master-0 sudo snap install multipass-sshfs
 	mkdir -p store/k3s-$CL_NAM-worker-$CNT
 	multipass mount -v -u 502:1000 -g 20:1000 store/k3s-$CL_NAM-worker-$CNT k3s-$CL_NAM-worker-$CNT:/Users/Ubuntu
 	echo "**************************************************************************************************************************** worker $CNT mounted"
