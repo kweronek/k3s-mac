@@ -10,9 +10,9 @@ Eine Reihe von Shell-Skripten, um auf dem Mac k3s-Cluster.
 
 ### Skripte und Anwendung:
 
-##### getKubeconfig
-
 ##### addCluster
+
+##### getKubeconfig
 
 ##### stopCluster
 
