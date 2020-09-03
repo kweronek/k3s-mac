@@ -63,6 +63,6 @@ stopCluster <Cluster-Name>
 ```
 ## Hilfreiche Befehle
 `multipass list`  
-`mulitpass info <Knoten-Name>`  
+`multipass info <Knoten-Name>`  
 `kubectl get nodes`  
 `kubectl get pods --all-namespaces`
