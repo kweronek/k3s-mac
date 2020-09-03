@@ -1,122 +1,91 @@
-#
 clear
-echo $0
 # single master multi node k3s cluster sturtup
-# user $CL_NAM-on.sh <cluster-name> < number of worker notes >
+# user k3s-$CL_NAM-on.sh <cluster-name> < number of worker notes >
 echo "****************************************************************************************************************************"
-echo "*** Create a K3S-cluster with name k3s-$1 with $2 worker and $3 master nodes ***"
-echo "****************************************************************************************************************************"
-export CL_NAM=k3s-$1
+echo Create a K3S-cluster with name $1 with $2 worker and $3 master nodes
+export CL_NAM=$1
 export NUM_WORKERS=$2
 export NUM_MASTERS=$3
+export UBUNTU_VERSION=lts
 
 echo "**************************************************************************************************************************** launch master"
-multipass launch ubuntu -n $CL_NAM-master-0 -v -c 1 -d 5G -m 1G
+multipass launch $UBUNTU_VERSION -n k3s-$CL_NAM-master-0 -v -c 1 -d 3G -m 1G
 
-echo "**************************************************************************************************************************** update master"
-multipass exec $CL_NAM-master-0 -- /bin/bash -c "printf 'Y' | sudo apt-get update"
+echo "**********************************************************************	****************************************************** update master"
+multipass exec k3s-$CL_NAM-master-0 sudo apt-get update
 
 echo "**************************************************************************************************************************** upgrade master"
-multipass exec $CL_NAM-master-0 -- /bin/bash -c "printf 'Y' | sudo apt-get upgrade"
-multipass exec $CL_NAM-master-0 -- /bin/bash -c "sudo apt install sshfs"             # sshfs is needed for mount
-multipass exec $CL_NAM-master-0 -- /bin/bash -c "printf 'Y' | sudo apt autoremove"
+multipass exec k3s-$CL_NAM-master-0 -- /bin/bash -c "sudo apt-get upgrade --assume-yes"
+# multipass exec k3s-$CL_NAM-master-0 sudo apt install sshfs
+multipass exec k3s-$CL_NAM-master-0 sudo snap install multipass-sshfs
+
 
 echo "**************************************************************************************************************************** mount master"
-mkdir -p store && chmod 777 store
-mkdir -p store/$CL_NAM-master-0
-multipass mount -v -u $(id -u $(whoami)):1000 -g $(id -g $(whoami)):1000 ./store/$CL_NAM-master-0 $CL_NAM-master-0:/Users/Ubuntu
+mkdir -p store
+mkdir -p store/k3s-$CL_NAM-master-0
+multipass mount -v -u 502:1000 -g 20:1000 store/k3s-$CL_NAM-master-0 k3s-$CL_NAM-master-0:/Users/Ubuntu
 
 echo "**************************************************************************************************************************** launch worker"
 for ((CNT=0; CNT<$NUM_WORKERS; CNT+=1)); do
-	multipass launch ubuntu -n $CL_NAM-worker-$CNT -v -c 1 -d 5G -m 1G
-	
-	# install CRI-O in Ubuntu (18.04, 19.04 and 19.10)
-    # https://github.com/cri-o/cri-o/blob/master/README.md
-
-    # read environment from os-release file tbd
-##    multipass exec $CL_NAM-worker-$CNT -- /bin/bash -c ". /etc/os-release"
-
-    # user custom versions
-    export NAME=Ubuntu
-    export VERSION_ID=18.04
-    export REQUIRED_VERSION=1.17
-
-    multipass exec $CL_NAM-worker-$CNT -- sudo sh -c "echo 'deb http://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/x${NAME}_${VERSION_ID}/ /' > /etc/apt/sources.list.d/devel:kubic:libcontainers:stable.list"  
-    multipass exec $CL_NAM-worker-$CNT -- /bin/bash -c "sudo wget -nv https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable/x${NAME}_${VERSION_ID}/Release.key -O- | sudo apt-key add -"
- 
-    multipass exec $CL_NAM-worker-$CNT -- /bin/bash -c "printf 'Y' | sudo apt-get -q update"
-    multipass exec $CL_NAM-worker-$CNT -- /bin/bash -c "sudo apt-get -q install runc"
-    multipass exec $CL_NAM-worker-$CNT -- /bin/bash -c "printf 'Y' | sudo apt-get -q install cri-o-${REQUIRED_VERSION}"
- 
-    multipass exec $CL_NAM-worker-$CNT -- /bin/bash -c "sudo systemctl daemon-reload"
-    multipass exec $CL_NAM-worker-$CNT -- /bin/bash -c "sudo systemctl enable crio"
-    multipass exec $CL_NAM-worker-$CNT -- /bin/bash -c "sudo systemctl start crio"
-
-	multipass exec $CL_NAM-worker-$CNT -- /bin/bash -c "printf 'Y' | sudo apt autoremove"	
+	multipass launch $UBUNTU_VERSION -n k3s-$CL_NAM-worker-$CNT -v -c 1 -d 3G -m 1G
 done
 
 echo "**************************************************************************************************************************** info"
-multipass info $CL_NAM-master-0
+multipass info k3s-$CL_NAM-master-0
 
 echo "**************************************************************************************************************************** install k3s on master"
 # Deploy k3s on the master node
-multipass exec $CL_NAM-master-0 -- /bin/bash -c "curl -sfL https://get.k3s.io | sh -s - --write-kubeconfig-mode 644"
+multipass exec k3s-$CL_NAM-master-0 -- /bin/bash -c "curl -sfL https://get.k3s.io | sh -s - --write-kubeconfig-mode 644"
 # Get the IP of the master node
-export K3S_NODEIP_MASTER="https://$(multipass info $CL_NAM-master-0 | grep "IPv4" | awk -F' ' '{print $2}'):6443"
+export K3S_NODEIP_MASTER="https://$(multipass info k3s-$CL_NAM-master-0 | grep "IPv4" | awk -F' ' '{print $2}'):6443"
 echo K3S_NODEIP_MASTER $K3S_NODEIP_MASTER
 # Get the TOKEN from the master node
-K3S_TOKEN="$(multipass exec $CL_NAM-master-0 -- /bin/bash -c "sudo cat /var/lib/rancher/k3s/server/node-token")"
+K3S_TOKEN="$(multipass exec k3s-$CL_NAM-master-0 -- /bin/bash -c "sudo cat /var/lib/rancher/k3s/server/node-token")"
 
 echo "**************************************************************************************************************************** upgrade workers"
 for ((CNT=0; CNT<$NUM_WORKERS; CNT+=1)); do
-	multipass exec $CL_NAM-worker-$CNT -- /bin/bash -c "printf 'Y' | sudo apt-get -q update"
-	multipass exec $CL_NAM-worker-$CNT -- /bin/bash -c "printf 'Y' | sudo apt-get -q upgrade"
-	echo "**************************************************************************************************************************** $CL_NAM-worker-$CNT upgraded"
+	multipass exec k3s-$CL_NAM-worker-$CNT sudo apt-get update
+	multipass exec k3s-$CL_NAM-worker-$CNT -- /bin/bash -c "sudo apt-get upgrade --assume-yes"
+	echo "**************************************************************************************************************************** k3s-$CL_NAM-worker-$CNT upgraded"
 done
 
-echo "******************************************************************************************** mount workers"
+echo "**************************************************************************************************************************** mount workers"
 for ((CNT=0; CNT<$NUM_WORKERS; CNT+=1)); do
- 	multipass exec $CL_NAM-worker-$CNT -- /bin/bash -c "sudo apt -q install sshfs"
-	mkdir -p ./store/$CL_NAM-worker-$CNT
-#	multipass mount -v -u 502:1000 -g 20:1000 ./store/$CL_NAM-worker-$CNT $CL_NAM-worker-$CNT:/Users/Ubuntu
-ultipass mount -v -u $(id -u $(whoami)):1000 -g $(id -g $(whoami)):1000 ./store/$CL_NAM-worker-$CNT $CL_NAM-worker-$CNT:/Users/Ubuntu
-
-echo "**************************************************************************************************************************** worker $CNT mounted"
+#	multipass exec k3s-$CL_NAM-worker-$CNT sudo apt install sshfs
+multipass exec k3s-$CL_NAM-master-0 sudo snap install multipass-sshfs
+	mkdir -p store/k3s-$CL_NAM-worker-$CNT
+	multipass mount -v -u 502:1000 -g 20:1000 store/k3s-$CL_NAM-worker-$CNT k3s-$CL_NAM-worker-$CNT:/Users/Ubuntu
+	echo "**************************************************************************************************************************** worker $CNT mounted"
 done
 
 echo "**************************************************************************************************************************** multipass info worker"
 for ((CNT=0; CNT<$NUM_WORKERS; CNT+=1)); do
-	multipass info $CL_NAM-worker-$CNT
+	multipass info k3s-$CL_NAM-worker-$CNT
 	echo "****************************************************************************************************************************"
 done
 
 echo "**************************************************************************************************************************** deploy k3s on workers"
 for ((CNT=0; CNT<$NUM_WORKERS; CNT+=1)); do
 	# Deploy k3s on the worker node
-	# using default runtime: containerd
-    multipass exec $CL_NAM-worker-$CNT -- /bin/bash -c "curl -sfL https://get.k3s.io | K3S_TOKEN=${K3S_TOKEN} K3S_URL=${K3S_NODEIP_MASTER} sh -"
-	# using container runtime cri 
-    #	multipass exec $CL_NAM-worker-$CNT -- /bin/bash -c "curl -sfL https://get.k3s.io | --container-runtime-endpoint=/usr/bin/crio| K3S_TOKEN=${K3S_TOKEN} K3S_URL=${K3S_NODEIP_MASTER}  sh -"
+	multipass exec k3s-$CL_NAM-worker-$CNT -- /bin/bash -c "curl -sfL https://get.k3s.io | K3S_TOKEN=${K3S_TOKEN} K3S_URL=${K3S_NODEIP_MASTER} sh -"
 	echo "**************************************************************************************************************************** k3s deployed on worker $CNT"
 done
-sleep 10
 
+sleep 10
 echo "**************************************************************************************************************************** label worker-nodes"
-multipass exec ${CL_NAM}-master-0 -- /bin/bash -c "export KUBECONFIG=~/.kube/config:/etc/rancher/k3s/k3s.yaml"
+multipass exec k3s-${CL_NAM}-master-0 -- /bin/bash -c "export KUBECONFIG=~/.kube/config:/etc/rancher/k3s/k3s.yaml"
 
 for ((CNT=0; CNT<$NUM_WORKERS; CNT+=1)); do
-	multipass exec ${CL_NAM}-master-0 -- /bin/bash -c "sudo kubectl label node ${CL_NAM}-worker-${CNT} node-role.kubernetes.io/worker=worker"
+	multipass exec k3s-${CL_NAM}-master-0 -- /bin/bash -c "sudo kubectl label node k3s-${CL_NAM}-worker-${CNT} node-role.kubernetes.io/worker=worker"
 done
 
 # Configure taint NoSchedule for the k3s-master node
-echo "**************************************************************************************************************************** taint-master"
-multipass exec $CL_NAM-master-0 -- /bin/bash -c "sudo kubectl taint node ${CL_NAM}-master-0 node-role.kubernetes.io/master=effect:NoSchedule"
-#multipass exec $CL_NAM-master-0 -- /bin/bash -c "sudo kubectl --kubeconfig=${HOME}/.kube/k3s.yaml taint node ${CL_NAM}-master-0 node-role.kubernetes.io/master=effect:NoSchedule"
-echo "**************************************************************************************************************************** "
+#echo "**************************************************************************************************************************** taint-nodes"
+multipass exec k3s-$CL_NAM-master-0 -- /bin/bash -c "kubectl --kubeconfig=${HOME}/.kube/k3s.yaml taint node k3s-${CL_NAM}-master-0 node-role.kubernetes.io/master=effect:NoSchedule"
+echo "**************************************************************************************************************************** multipass list"
 multipass list
 sleep 10
 
 echo "**************************************************************************************************************************** kubectl get nodes"
-multipass exec $CL_NAM-master-0 -- /bin/bash -c "sudo kubectl get nodes"
+multipass exec k3s-$CL_NAM-master-0 -- /bin/bash -c "sudo kubectl get nodes"
 echo "**************************************************************************************************************************** cluster $CL_NAM completed"
-# EOF  
