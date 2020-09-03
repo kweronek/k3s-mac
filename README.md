@@ -1,13 +1,13 @@
 # k3s-mac
 
 ## Beschreibung
-Eine Reihe von Shell-Skripten, um auf dem Mac ein k3s-Cluster zur erzeugen, zu betreiben und zu löschen. k3s ist eine leichtgewichtige aber vollständige und zertifizierte Kubernetes-Distribution. Näheres siehe unter `[k3s](https://github.com/rancher/k3s)
+Eine Reihe von Shell-Skripten, um auf dem Mac ein k3s-Cluster zur erzeugen, zu betreiben und zu löschen. k3s ist eine leichtgewichtige aber vollständige und zertifizierte Kubernetes-Distribution. Näheres siehe unter `[k3s](https://github.com/rancher/k3s)`.
 
 ### Anwendungsfall
 k3s-Cluster ermöglichen die schnelle und Ressourcenschonen Implementeriung eines voll funktionsfähigen Kubernetes-Clusters auf einen MAC. Dadurch können einen Vielzahl von Kubernetes-Anwendungen auf dem MAC getestet werden.
 
 ### Funktionsweise
-Die parametrisierten Script arbeiten mit Cononical [multipass](https://multipass/run). Dabei werden mindestens zwei virtuelle Maschinen (VMs) mit Ubuntu erzeugt, upgedated und die erforderlichen Pakete installiert. Darüber hinaus werden Verzeichnisse der VMs in lokale Verzeichnisse gemountet.
+Die parametrisierten Script arbeiten mit Cononical [multipass](https://multipass/run). Dabei werden mindestens zwei virtuelle Maschinen (VMs) mit Ubuntu erzeugt, upgedated und die erforderlichen Pakete installiert. Darüber hinaus werden Verzeichnisse der VMs in lokale Verzeichnisse gemountet. Dabei wird immer die aktuelle LTS-Version von Ubuntu verwendet und die letzte aktuelle stabile Version von k3s. Für k3s wird aktuelle containerD als Runtime verwendet.
 
 ### Voraussetzungen and technische Anforderungen
 Benötigt werden:
