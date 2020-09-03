@@ -7,7 +7,7 @@ Eine Reihe von Shell-Skripten, um auf dem Mac ein K3s-Cluster zur erzeugen, zu b
 K3s-Cluster ermöglichen die schnelle und Ressourcenschonen Implementeriung eines voll funktionsfähigen Kubernetes-Clusters auf einen MAC. Dadurch können einen Vielzahl von Kubernetes-Anwendungen auf dem MAC getestet werden.
 
 ### Funktionsweise
-Die parametrisierten Script arbeiten mit Cononical [multipass](https://multipass/run). Dabei werden mindestens zwei virtuelle Maschinen (VMs) mit Ubuntu erzeugt, upgedated und die erforderlichen Pakete installiert. Darüber hinaus werden Verzeichnisse der VMs in lokale Verzeichnisse gemountet. Dabei wird immer die aktuelle [`Ubuntu-LTS-Version`](https://wiki.ubuntu.com/Releases) verwendet und die letzte aktuelle stabile Version von [`K3s`](https://github.com/rancher/k3s/releases). Für K3s wird aktuelle containerD als Runtime verwendet.
+Die parametrisierten Script arbeiten mit Cononical [multipass](https://multipass/run). Dabei werden mindestens zwei virtuelle Maschinen (VMs) mit Ubuntu erzeugt, upgedated und die erforderlichen Pakete installiert. Darüber hinaus werden Verzeichnisse der VMs in lokale Verzeichnisse gemountet. Dabei wird immer die aktuelle [`Ubuntu-LTS-Version`](https://wiki.ubuntu.com/Releases) verwendet und die letzte aktuelle [`stabile Version von K3s`](https://github.com/rancher/k3s/releases). Für K3s wird aktuelle containerD als Runtime verwendet.
 
 ### Voraussetzungen and technische Anforderungen
 Benötigt werden:
@@ -17,7 +17,7 @@ Benötigt werden:
 * Software: 
   * Canonical [`multipass`](https://multipass/run)
   * Kubernetes: [`kubectl`](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
-* Internetverbindung zum Laden der Ubuntu- und K3s-Software.
+* Internetverbindung zum Laden der Ubuntu- und K3s-Software.  
 Anmerkung: Bei einer größeren Anzahl von Worker-Knoten sind entsprechend mehr Hardware (ca. 1G RAM, 3G Platte, 1 CPU je Knoten) bereitzustellen.
 
 ## Skripte und Anwendung:
@@ -64,5 +64,6 @@ stopCluster <Cluster-Name>
 ## Hilfreiche Befehle
 `multipass list`  
 `multipass info <Knoten-Name>`  
+`kubectl cluster-info`  
 `kubectl get nodes`  
 `kubectl get pods --all-namespaces`
