@@ -8,7 +8,7 @@ Eine Reihe von Shell-Skripten, um auf dem Mac ein K3s-Cluster zur erzeugen, zu b
 K3s-Cluster ermöglichen u.a. die schnelle und ressourcenschonende Implementeriung eines voll funktionsfähigen Kubernetes-Clusters auf einen MAC. Dadurch können einen Vielzahl von Kubernetes-Anwendungen auf dem MAC getestet werden.
 
 ### Funktionsweise
-Die parametrisierten Script arbeiten mit Cononical [`multipass`](https://multipass/run). Dabei werden mindestens zwei virtuelle Maschinen (VMs) mit Ubuntu erzeugt, upgedated und die erforderlichen Pakete installiert. Darüber hinaus werden Verzeichnisse der VMs in lokale Verzeichnisse gemountet. Dabei wird immer die aktuelle [`Ubuntu-LTS-Version`](https://wiki.ubuntu.com/Releases) verwendet und die letzte aktuelle [`stabile Version von K3s`](https://github.com/rancher/k3s/releases). Für K3s wird aktuelle [`containerD`](https://containerd.io) als Runtime verwendet.
+Die parametrisierten Scripte arbeiten mit Cononical [`multipass`](https://multipass/run). Dabei werden mindestens zwei virtuelle Maschinen (VMs) mit Ubuntu erzeugt, upgedated und die erforderlichen Pakete installiert. Darüber hinaus werden Verzeichnisse der VMs in lokale Verzeichnisse gemountet. Dabei wird immer die aktuelle [`Ubuntu-LTS-Version`](https://wiki.ubuntu.com/Releases) verwendet und die letzte aktuelle [`stabile Version von K3s`](https://github.com/rancher/k3s/releases). Für K3s wird aktuelle [`containerD`](https://containerd.io) als Runtime verwendet.
 
 ### Voraussetzungen and technische Anforderungen
 Benötigt werden:
