@@ -5,7 +5,7 @@ Für die Verwendung von K3s auf Linux siehe [hier](https://github.com/kweronek/k
 Eine Reihe von Shell-Skripten, um auf dem Mac ein K3s-Cluster zur erzeugen, zu betreiben und zu löschen. K3s ist eine leichtgewichtige aber vollständige und zertifizierte Kubernetes-Distribution. Näheres siehe unter [`K3s`](https://github.com/rancher/k3s).
 
 ### Anwendungsfall
-K3s-Cluster ermöglichen die schnelle und Ressourcenschonen Implementeriung eines voll funktionsfähigen Kubernetes-Clusters auf einen MAC. Dadurch können einen Vielzahl von Kubernetes-Anwendungen auf dem MAC getestet werden.
+K3s-Cluster ermöglichen u.a. die schnelle und ressourcenschonende Implementeriung eines voll funktionsfähigen Kubernetes-Clusters auf einen MAC. Dadurch können einen Vielzahl von Kubernetes-Anwendungen auf dem MAC getestet werden.
 
 ### Funktionsweise
 Die parametrisierten Script arbeiten mit Cononical [`multipass`](https://multipass/run). Dabei werden mindestens zwei virtuelle Maschinen (VMs) mit Ubuntu erzeugt, upgedated und die erforderlichen Pakete installiert. Darüber hinaus werden Verzeichnisse der VMs in lokale Verzeichnisse gemountet. Dabei wird immer die aktuelle [`Ubuntu-LTS-Version`](https://wiki.ubuntu.com/Releases) verwendet und die letzte aktuelle [`stabile Version von K3s`](https://github.com/rancher/k3s/releases). Für K3s wird aktuelle [`containerD`](https://containerd.io) als Runtime verwendet.
@@ -31,7 +31,8 @@ addCluster <Cluster-Name> <Zahl der Worker-Nodes> <Zahl der Master-Nodes>
 ```
 Als Cluster-Name wird dann `k3s-<Cluster-Name>` verwendet. Die Knotenbezeichnungen sind dann:  
 * `k3s-<Cluster-Name>-master-0`
-* `k3s-<Cluster-Name>-worker-<i>` mit `<i>=0 ... <Zahl der Worker-Nodes>`  
+* `k3s-<Cluster-Name>-worker-<i>` mit `<i>=0 ... <Zahl der Worker-Nodes>`
+
 Hinweis: in der aktuellen Version ist nur ein Master-Node möglich (Einsatz von SQ-Lite)
 
 ### getKubeconfig
