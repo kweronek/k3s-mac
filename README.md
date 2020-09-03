@@ -18,13 +18,13 @@ Benötigt wird:
 ## Skripte und Anwendung:
 
 ### addCluster
-`addCluster` erstellt Master- und Worker-Nodes und erzeugt einen neuen k3s Cluster.  
+`addCluster` erstellt k3s-Master- und -Worker-Nodes und erzeugt somit einen neuen Kubernetes-Cluster.  
 ```  
-addCluster ```*<Cluster-Name>*``` <Zahl der Worker-Nodes> <Zahl der Master-Nodes>  
+addCluster <Cluster-Name> <Zahl der Worker-Nodes> <Zahl der Master-Nodes>  
 ```
 Als Cluster-Name wird dann `k3s-<Cluster-Name>` verwendet. Die Knotenbezeichnungen sind dann:  
 * `k3s-<Cluster-Name>-master-0`
-* `k3s-<Cluster-Name>-worker-<i>` mit `<i>=0 ... <Zahl der Worker-Nodes>`
+* `k3s-<Cluster-Name>-worker-<i>` mit `<i>=0 ... <Zahl der Worker-Nodes>`  
 Hinweis: in der aktuellen Version ist nur ein Master-Node möglich (Einsatz von SQ-Lite)
 
 ### getKubeconfig
